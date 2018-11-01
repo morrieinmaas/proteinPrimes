@@ -10,7 +10,8 @@ docker build .
 docker-compose run web python /code/manage.py migrate --noinput
 
 # create a superuser for admin panel
-#docker-compose run web python /code/manage.py createsuperuser
+# comment this out if you have created such user already and you do not wish to create another one
+docker-compose run web python /code/manage.py createsuperuser
 
 # Spawn Django, Redis and PostgreSQL with docker compose
 docker-compose up -d --build
