@@ -1,14 +1,22 @@
 version: '3.6'
 
+networks:
+  mynet:
+    driver: overlay
+    driver_opts:
+      encrypted: "true"
+
 services:
   db:
     image: postgres:10.1-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - mynet
   redis:
     image: redis:latest
-    # ports:
-      # - 6379:6379
+    networks:
+      - mynet
   web:
     build: .
     command: python /code/manage.py migrate --noinput
@@ -22,15 +30,18 @@ services:
     depends_on:
       - db
       - redis
+    networks:
+      - mynet
   celery:
     build: .
     command: celery worker -A proteinPrimes -l info
     volumes:
       - .:/code
+    networks:
+      - mynet
     depends_on:
       - db
       - redis
 
 volumes:
   postgres_data:
-
