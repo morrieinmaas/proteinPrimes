@@ -21,7 +21,7 @@ the advantage that we can spawn many tasks via the Django server and submit them
 Sockets make the long-poling obsolete so you instantly get the result when it's send a sopposed to GET/POST back and forth. We also create and update the tasks via 
 the models to our PostgreSQL instance, so nothing gets lost.
 The second part is running everything containerized. Docker Swarm has some great feature - for example, it uses secure communication within the swarm by default. This is done
-issueing CA certificates for all containers in the swarm. You can also specify custom certificates from the CLI. This saves a whole lot of time securing sucha setup part by part. 
+issueing CA certificates for all containers in the swarm. You can also specify custom certificates from the CLI. Either way, it saves a whole lot of time compared to securing such a setup part by part. 
 In order to make it a bit easier on resources and save people the trouble of creating a docker registry in their local environment, the projects uses a docker overlay network
 with encryption, which you can also find specified in the docker-compose.yaml. This is pretty much a shortcut to creating a single node swarm on your local machine. 
 
@@ -34,13 +34,13 @@ I hope you enjoy it, find it useful and you're most welcome to suggest improveme
 
 I've tested the setup on Linux, but this should work for any UNIX system with a bash shell.
 
-* _Prerequisits:_ Make sure you have docker and docker-compose (and git) installed and avaiable in your $PATH. Also, make sure docker deamon is actually enbaled and running.
+* _Prerequisits:_ Make sure you have docker and docker-compose (and git) installed and available in your $PATH. Also, make sure docker deamon is actually enbaled and running.
   * It's also a good idea to check what containers are currently running and what ports they use to avoid conflicts (this project wil occupy 8000, 6379 and 5432).
   * Check whether you have added something like `127.0.0.1   localhost` added to your /etc/hosts to make the composed containers available on your localhost
 * Clone the repo with `git clone https://github.com/morrieinmaas/proteinPrimes`
 * Change into the project folder `cd proteinPrimes`
-* Simply run it with `bash start_it.sh` - this will use the Dockerfile, docker-compose.yaml with a terminal commands to let you sit back and relax
-  * You will be prompted to create a user and password which is for the django admin backend
+* Simply run it with `bash start_it.sh` - this will use the Dockerfile and docker-compose.yaml with terminal commands to let you sit back and relax
+  * You will be prompted to create a user and password which are for the django admin backend
   * Comment out the respective command in the bash script if you have created a user already and/or do not want to create another one
 
 And that should be it. You can navigate to the app in your browser on _localhost:8000_ and go to the django admin view by adding a _/admin_ to that.
@@ -48,7 +48,7 @@ And that should be it. You can navigate to the app in your browser on _localhost
 ### Possible improvements
 
 * improve templating using base.html etc.
-* move javascript from index.html to separate file. It's now parked where it is to make it easier to follow what going on.
+* move javascript from index.html to separate file. It's now parked where it is to make it easier to follow what is going on.
 * Replace the JS random job generation by a cron/periodic job for instance with celery\_beat\_schedule
 * Inspite of the previous point, we can also achieve this switching to django channels2 in the consumers.py. Channels2 works quite differently to Channels1.
 * Use proper Django forms for submissions and validation
