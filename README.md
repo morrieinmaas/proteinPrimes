@@ -35,13 +35,13 @@ I hope you enjoy it, find it useful and you're most welcome to suggest improveme
 I've tested the setup on Linux, but this should work for any UNIX system with a bash shell.
 
 * _Prerequisits:_ Make sure you have docker and docker-compose (and git) installed and avaiable in your $PATH. Also, make sure docker deamon is actually enbaled and running.
-** It's also a good idea to check what containers are currently running and what ports they use to avoid conflicts (this project wil occupy 8000, 6379 and 5432).
-** Check whether you have added something like `127.0.0.1   localhost` added to your /etc/hosts to make the composed containers available on your localhost
+  * It's also a good idea to check what containers are currently running and what ports they use to avoid conflicts (this project wil occupy 8000, 6379 and 5432).
+  * Check whether you have added something like `127.0.0.1   localhost` added to your /etc/hosts to make the composed containers available on your localhost
 * Clone the repo with `git clone https://github.com/morrieinmaas/proteinPrimes`
 * Change into the project folder `cd proteinPrimes`
 * Simply run it with `bash start_it.sh` - this will use the Dockerfile, docker-compose.yaml with a terminal commands to let you sit back and relax
-** You will be prompted to create a user and password which is for the django admin backend
-** Comment out the respective command in the bash script if you have created a user already and/or do not want to create another one
+  * You will be prompted to create a user and password which is for the django admin backend
+  * Comment out the respective command in the bash script if you have created a user already and/or do not want to create another one
 
 And that should be it. You can navigate to the app in your browser on _localhost:8000_ and go to the django admin view by adding a _/admin_ to that.
 
