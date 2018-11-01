@@ -5,8 +5,8 @@ Welcome to another demo project that evolves around prime factoring.
 ### Overview
 
 _What does it do?_ Quite simple. The project, when running, calculates prime factors of integers. You can go to _localhost:8000_ and watch
-jobs for random numbers being spawned and submitted and you may as well subnmit you own number you want to know the prime factors of. 
-You can see the latest 10 jobs and the instantly show up when submitted and you will instantly receive a notification when a job completes.
+jobs for random numbers being spawned and submitted and you may as well submit your own number you want to know the prime factors of. 
+You can see the latest 10 jobs and they instantly show up when submitted and you will instantly receive a notification when a job completes.
 
 _Sounds simple(ish) - how does it work?_ A little more complex. I tried to combine a few bits and bobs I hadn't combined or even used before really.
 The main server is a Django instance. It serves you with and handles your interaction with the UI. This happens via models (remember the MVC framwork?!). 
