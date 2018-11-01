@@ -34,7 +34,7 @@ I hope you enjoy it, find it useful and you're most welcome to suggest improveme
 
 I've tested the setup on Linux, but this should work for any UNIX system with a bash shell.
 
-* _Prerequisits:_ Make sure you have docker and docker-compose (and git) installed and available in your $PATH. Also, make sure docker deamon is actually enbaled and running.
+* _Prerequisits:_ Make sure you have docker and docker-compose (and git) installed and available in your $PATH. Also, make sure docker deamon is actually enabled and running.
   * It's also a good idea to check what containers are currently running and what ports they use to avoid conflicts (this project wil occupy 8000, 6379 and 5432).
   * Check whether you have added something like `127.0.0.1   localhost` added to your /etc/hosts to make the composed containers available on your localhost
 * Clone the repo with `git clone https://github.com/morrieinmaas/proteinPrimes`
