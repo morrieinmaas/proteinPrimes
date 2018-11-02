@@ -9,18 +9,15 @@ from selenium import webdriver
 import time
 
 
-
 class JobTest(TestCase):
 
     def create_job(self, name="1000", status='started'):
         return Job.object.create(name=name, status=status, created=timezone.now())
 
-    
     def test_job_creation(self):
         j = self.create_job()
         self.assertTrue(isinstance(j, Job))
         self.assertEqual(j.__unicode__(), j.name)
-
 
     def test_completed_job(self, name="1", status="completed"):
         """
@@ -44,7 +41,6 @@ class TestJobsUI(TestCase):
     def create_job(self, name="1000", status='started'):
         return Job.object.create(name=name, status=status, created=timezone.now())
 
-
     def setUp(self):
         self.selenium = webdriver.Firefox()
         super(TestJobsUI, self).setUp()
@@ -52,7 +48,6 @@ class TestJobsUI(TestCase):
     def tearDown(self):
         self.selenium.quit()
         super(TestJobsUI, self).tearDown()
-
 
     def test_job_view(self):
         j = self.create_job()
@@ -63,14 +58,12 @@ class TestJobsUI(TestCase):
         self.assertInHTML(j.name, resp.content)
         self.assertInHTML(j.status, resp.content)
 
-
     @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
                        CELERY_ALWAYS_EAGER=True,
                        BROKER_BACKEND='memory')
     def test_run_job(self):
         result = sec3.delay()
         self.assertTrue(result.successful())
-
 
     def test_page_layout(self):
         selenium = self.selenium
@@ -89,6 +82,7 @@ class TestJobsUI(TestCase):
         # wait some time and check if completed
         time.sleep(5)
         assert "completed" in selenium.page_source
+        self.tearDown()
 
 
 if __name__ == '__main__':
