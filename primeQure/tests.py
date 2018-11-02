@@ -1,5 +1,4 @@
 import unittest
-import unittest.TestCase
 from django.test import TestCase
 from .models import Job
 from django.utils import timezone
