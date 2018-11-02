@@ -24,91 +24,92 @@
 
 <body>
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            <div id="task_runner_div" style="margin-top:50px;">
-                <h2>ProteinPrimes epic prime factorization</h2>
-                <p>Submit an integer and see the table update via websockets when your job is received and when the result is sent.</p>
-                <p>Your job runs on a Celery instance in the background and is also stored in a PostgreSQL database</p>
-                <form id="taskform">
-                    <input id="task_name" type="number" step="1" placeholder="Task Name" required>
-                    <button type="submit" id="go" class="btn btn-info">Get prime factors</button>
-                </form>
-            </div>
-            <div id="res" style="margin-top:100px;">
-                <h2>Task Overview</h2>
-                <table id="task_status" class="table">
-                    <thead>
-                        <tr>
-                            <th>Input Value</th>
-                            <th>Result</th>
-                            <th>Task Status</th>
-                        </tr>
-                    </thead>
-                    {% if jobs %}
-                      {% for job in jobs %}
-                        <tbody>
-                          <td>{{ job.name }}</td>
-                          <td>{{ job.result_str }}</td>
-                          <td>{{ job.status }}</td>
-                        </tbody>
-                      {% endfor %}
-                    {% else %}
-                      <p>There are no tasks yet</p>
-                    {% endif %}
-                </table>
-            </div>
-    </div>
-</div> <!-- container -->
+  <div class="container">
+      <div class="row">
+          <div class="col-sm-6">
+              <div id="task_runner_div" style="margin-top:50px;">
+                  <h2>ProteinPrimes epic prime factorization</h2>
+                  <p>Submit an integer and see the table update via websockets when your job is received and when the result is sent.</p>
+                  <p>Your job runs on a Celery instance in the background and is also stored in a PostgreSQL database</p>
+                  <form id="taskform">
+                      <input id="task_name" type="number" min="1" step="1" placeholder="Integer" required>
+                      <button type="submit" id="go" class="btn btn-info">Get prime factors</button>
+                  </form>
+              </div>
+              <div id="res" style="margin-top:100px;">
+                  <h2>Task Overview</h2>
+                  <table id="task_status" class="table">
+                      <thead>
+                          <tr>
+                              <th>Input Value</th>
+                              <th>Result</th>
+                              <th>Task Status</th>
+                          </tr>
+                      </thead>
+                      {% if jobs %}
+                        {% for job in jobs %}
+                          <tbody>
+                            <td>{{ job.name }}</td>
+                            <td>{{ job.result_str }}</td>
+                            <td>{{ job.status }}</td>
+                          </tbody>
+                        {% endfor %}
+                      {% else %}
+                        <p>There are no tasks yet</p>
+                      {% endif %}
+                  </table>
+              </div>
+      </div>
+  </div> <!-- container -->
 
 
-<script>
-  $(function() {
-    // When we're using HTTPS, use WSS too.
-    var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    var ws_path = ws_scheme + '://' + window.location.host + '/dashboard/';
-    console.log("Connecting to " + ws_path)
-    var socket = new ReconnectingWebSocket(ws_path);
-    
-    // We could also render a table using JS instead. However, the above solution is more pythonic
-    // and uses the data via models and views instead of by passing it.
-    socket.onmessage = function(message) {
-        console.log("Got message: " + message.data);
-        console.log("Got message: " + message.data);
-        var data = JSON.parse(message.data);
-        $('#res').load(document.URL + ' #res');
-    };
+  <script>
+    $(function() {
+      // When we're using HTTPS, use WSS too.
+      var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+      var ws_path = ws_scheme + '://' + window.location.host + '/dashboard/';
+      console.log("Connecting to " + ws_path)
+      var socket = new ReconnectingWebSocket(ws_path);
+      
+      // We could also render a table using JS instead. However, the above solution is more pythonic
+      // and uses the data via models and views instead of by passing it.
+      socket.onmessage = function(message) {
+          console.log("Got message: " + message.data);
+          console.log("Got message: " + message.data);
+          var data = JSON.parse(message.data);
+          $('#res').load(document.URL + ' #res');
+      };
 
-    $("#taskform").on("submit", function(event) {
-      function getRandomInt(max) {
-            return Math.floor(Math.random() * Math.floor(max));
+      $("#taskform").on("submit", function(event) {
+        function getRandomInt(max) {
+              return Math.floor(Math.random() * Math.floor(max));
+            };
+        console.log("very triggering", $('#task_name').val().length);
+        //The validation ternary operator is basically redundant, because we check for a non empty input and 
+        //integer value in input field itself. However, this can be used to generate a random number task if
+        //input is handled differently
+        let name = (($('#task_name').val().length > 0) ? $('#task_name').val() : getRandomInt(1000000));
+          var message = {
+              action: "start_sec3",
+              job_name: name
           };
-      console.log("very triggering", $('#task_name').val().length);
-      //The validation ternary operator is basically redundant, because we check for a non empty input and 
-      //integer value in input field itself. However, this can be used to generate a random number task if
-      //input is handled differently
-      let name = (($('#task_name').val().length > 0) ? $('#task_name').val() : getRandomInt(1000000));
-        var message = {
-            action: "start_sec3",
-            job_name: name
-        };
-        socket.send(JSON.stringify(message));
-        $('#taskform').find('input').val(''); 
-        return false;
-    });
-
-    // This is slightly hacky as we ideally should be passing a random number here as
-    // opposed to generating it if the input is empty. Or we could run a cron/periodic 
-    // job in celery with e.g. beat, but this example illustrates the advantages of websockets
-    // a better
-    setInterval(function() {
-      $("#taskform").trigger("submit",  function(event) {
+          socket.send(JSON.stringify(message));
+          $('#taskform').find('input').val(''); 
           return false;
-        });
-      }, 10000);
-  });
-</script>
+      });
+
+      // This is slightly hacky as we ideally should be passing a random number here as
+      // opposed to generating it if the input is empty. Or we could run a cron/periodic 
+      // job in celery with e.g. beat, but this example illustrates the advantages of websockets
+      // better
+      // Submit a random task every 10 seconds
+      setInterval(function() {
+        $("#taskform").trigger("submit",  function(event) {
+            return false;
+          });
+        }, 10000);
+    });
+  </script>
 
 </body>
 </html>
